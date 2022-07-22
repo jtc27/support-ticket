@@ -7,7 +7,9 @@ const app = express()
 
 // CREATE A ROUTE WITH EXPRESS
 app.get('/', (req, res) => {
-  res.status(200).json({message: 'Welcome to the Support Desk API'})
+  res.send('Hello')
+  res.json({message: 'Welcome to the Support Desk API'})
+  res.status(201).json({message: 'Welcome to the Support Desk API'})
 })
 
 

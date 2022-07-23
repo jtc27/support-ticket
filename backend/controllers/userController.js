@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs')
 
 const User = require('../models/userModel')
 
-// Registers a new user
+// REGISTER A NEW USER
 // route: /api/users
 // access is public
 const registerUser = asyncHandler (async(req, res) => {
@@ -47,15 +47,30 @@ const registerUser = asyncHandler (async(req, res) => {
     })
   } else {
     res.status(400)
-    throw new error('Invalid user data');
+    throw new Error('Invalid user data');
   }
 })
 
-// Logs in user
+// USER LOGIN
 // route: /api/users/login
 // access is public
 const loginUser = asyncHandler (async(req, res) => {
-  res.send('Login Route')
+  const {email, password} = req.body
+
+  const user = await User.findOne({email})
+
+  //check if user exists
+  //check if passwords match
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.status(200).json({
+       _id: user._id,
+       name: user.name,
+       email: user.email
+    })
+  } else {
+    res.status(401)
+    throw new Error('Invalid credentials')
+  }
 })
 
 module.exports = {

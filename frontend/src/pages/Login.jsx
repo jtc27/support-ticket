@@ -18,7 +18,7 @@ function Login() {
   const dispatch = useDispatch()
 
   //REDUX get the global state of state.auth
-  const {user, isLoading, isSuccess, message} = useSelector((state) => state.auth)
+  const {user, isLoading, isError, isSuccess, message}  = useSelector((state) => state.auth)
 
   //changes the name/email/password fields in the formData
   const onChange = (e) => {

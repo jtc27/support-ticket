@@ -1,10 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {toast} from 'react-toastify'
 import { FaSignInAlt } from 'react-icons/fa'
 
 //REDUX
 import {useSelector, useDispatch} from 'react-redux'
-import {login} from '../features/auth/authSlice'
+import {login, reset} from '../features/auth/authSlice'
+
+import { useNavigate } from 'react-router-dom'
+
+import Spinner from '../components/Spinner'
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -19,6 +23,22 @@ function Login() {
 
   //REDUX get the global state of state.auth
   const {user, isLoading, isError, isSuccess, message}  = useSelector((state) => state.auth)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(isError) {
+      toast.error(message)  //message will be set in Redux, we got it with useSelector
+    }
+
+    //Redirect if successful login
+    if (isSuccess || user) {
+      navigate('/')
+    }
+
+    dispatch(reset())
+  }, [isError, isSuccess, user, message, navigate, dispatch])
+
 
   //changes the name/email/password fields in the formData
   const onChange = (e) => {
@@ -35,10 +55,11 @@ function Login() {
       email,
       password
     }
-
     dispatch(login(userData))
-
   }
+
+  if(isLoading) { return <Spinner/> }
+
 
 return (
   <>

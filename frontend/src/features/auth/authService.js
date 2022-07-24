@@ -1,6 +1,6 @@
 import axios from 'axios' //or can use fetchAPI, but axios has additional tools
 
-const API_URL = '/api/users'
+const API_URL = '/api/users/'
 // Frontend package.json has "proxy": "http://localhost:5000" (The backend server)
 // Otherwise it will go to "http://localhost:3000/api/users" (front end server) and we don't want that
 
@@ -17,12 +17,26 @@ const register = async(userData) => {
   return response.data
 }
 
+//LOGIN
+const login = async(userData) => {
+  const response = await axios.post(API_URL + 'login', userData) //post request
+
+  if (response.data) {
+    localStorage.setItem('user', JSON.stringify(response.data))
+    //setItem: saves the data we get back, including web token
+    //stringify: local storage can only hold strings, not JSON
+  }
+
+  return response.data
+}
+
 //LOGOUT USER
 const logout = () => localStorage.removeItem('user')
 
 const authService = {
   register, // Register user function
   logout,
+  login,
 }
 
 export default authService

@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import {register, reset} from '../features/auth/authSlice'
 
+import Spinner from '../components/Spinner'
+
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -65,6 +67,10 @@ function Register() {
       //DISPATCHES the register function from authSlice.js
       dispatch(register(userData))
     }
+  }
+
+  if(isLoading) {
+    return <Spinner/>
   }
 
 return (

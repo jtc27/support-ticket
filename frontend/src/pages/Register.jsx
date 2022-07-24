@@ -2,6 +2,10 @@ import { useState } from 'react'
 import {toast} from 'react-toastify'
 import { FaUser } from 'react-icons/fa'
 
+//REDUX
+import {useSelector, useDispatch} from 'react-redux'
+import {register} from '../features/auth/authSlice'
+
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,6 +15,12 @@ function Register() {
   })
 
   const { name, email, password, password2 } = formData
+
+  //REDUX HOOK dispatch our actions such as register. '../features/auth/authSlice'
+  const dispatch = useDispatch()
+
+  //REDUX HOOK useSelector, get the state.auth from global state
+  const {user, isLoading, isSuccess, message} = useSelector(state => state.auth) //in authSlice.js it is named 'auth'
 
   //changes the name/email/password fields in the formData
   const onChange = (e) => {
@@ -25,13 +35,24 @@ function Register() {
 
     if (password !== password2) {
       toast.error('Passwords do not match')
+    } else {
+      
+      //IF passwords match and all fields are written...
+      const userData = {
+        name,
+        email,
+        password,
+      }
+
+      //DISPATCHES the register function from authSlice.js
+      dispatch(register(userData))
     }
   }
 
 return (
   <>
     <section className="heading">
-      <h1><FaUser /> Register</h1>
+      <h1><FaUser /> Register </h1>
       <p>Please create an account</p>
     </section>
 

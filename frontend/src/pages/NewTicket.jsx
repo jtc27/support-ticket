@@ -9,6 +9,7 @@ import {toast} from 'react-toastify'
 
 import {createTicket, reset} from '../features/tickets/ticketSlice'
 import Spinner from '../components/Spinner'
+import BackButton from '../components/BackButton'
 
 function NewTicket() {
 
@@ -50,10 +51,9 @@ function NewTicket() {
     dispatch(createTicket({product, description}))
   }
 
-
-
   return (
     <>
+    <BackButton url='/' />
     <section className='heading'>
       <h1>Create a New Ticket</h1>
       <p>Please fill out the form below</p>

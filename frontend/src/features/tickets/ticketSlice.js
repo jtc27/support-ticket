@@ -29,6 +29,22 @@ export const createTicket = createAsyncThunk('tickets/create', async (ticketData
   }
 })
 
+//GET USER TICKETS
+export const getTickets = createAsyncThunk('tickets/getAll', async (_, thunkAPI) => { //Don't need ticketData
+  try {
+    //thunkAPI can get state from auth state
+    const token = thunkAPI.getState().auth.user.token
+
+    return await ticketService.getTickets(token) //Don't need ticketData
+  } catch (error) {
+    //WE WANT ERROR MESSAGE FROM THE BACK END
+    const message = 
+    (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
 export const ticketSlice = createSlice({
   name: 'ticket',
   initialState,
@@ -44,6 +60,17 @@ export const ticketSlice = createSlice({
       state.isSuccess = true
     })
     .addCase(createTicket.rejected, (state, action) => {
+      state.isLoading = false
+      state.isError = true
+      state.message = action.payload
+    })
+    .addCase(getTickets.pending, (state) => {state.isLoading = true})
+    .addCase(getTickets.fulfilled, (state, action) => {  //GETTING DATA SO WE PASS IN ACTION
+      state.isLoading = false
+      state.isSuccess = true
+      state.tickets = action.payload
+    })
+    .addCase(getTickets.rejected, (state, action) => {
       state.isLoading = false
       state.isError = true
       state.message = action.payload

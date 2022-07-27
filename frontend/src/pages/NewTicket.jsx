@@ -1,12 +1,24 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 //local state with fields in the form
 
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 //get user from global state
+
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
+
+import {createTicket, reset} from '../features/tickets/ticketSlice'
+import Spinner from '../components/Spinner'
 
 function NewTicket() {
 
   const {user} = useSelector((state) => state.auth)
+  const {isLoading, isError, isSuccess, message} = useSelector((state) => state.ticket)
+  // get the ticket state
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const [name] = useState(user.name)
   const [email] = useState(user.email)
   // ^ setName and setEmail not needed because we won't change these
@@ -14,8 +26,28 @@ function NewTicket() {
   // ^ it can't be empty string because this is an enum in BACKEND/.../ticketModel.js.  one option must be chosen
   const [description, setDescription] = useState('')
 
+  useEffect(()=>{
+    if (isError) {
+      toast.error(message)
+    }
+
+    if (isSuccess) {
+      dispatch(reset())
+      navigate('/tickets')  //resets state and goes to the /tickets website
+    }
+
+    dispatch(reset())
+  }, [dispatch, isError, isSuccess, navigate, message]) // dependencies
+
+  if (isLoading) {
+    return <Spinner/>
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
+
+    //submit button dispatches the createTicket function
+    dispatch(createTicket({product, description}))
   }
 
 

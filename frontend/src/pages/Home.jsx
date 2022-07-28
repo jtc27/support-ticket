@@ -1,11 +1,22 @@
 import {Link} from 'react-router-dom'
 import { FaQuestionCircle, FaTicketAlt } from 'react-icons/fa'
+import {useSelector} from 'react-redux'
 
 function Home() {
+
+  const {user} = useSelector((state) => state.auth)
+
   return (
     <>
     <section className="heading">
-      <h1>What do you need help with?</h1>
+
+      {user ? ( <h1>Hi <b>{user.name}</b>, what do you need help with?</h1> ) : 
+        (    
+        <>
+          <h1>What do you need help with?</h1>
+        </>
+        )}
+
       <p>Please choose from an option below</p>
     </section>
 

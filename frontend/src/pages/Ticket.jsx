@@ -1,6 +1,6 @@
 import {useSelector, useDispatch} from 'react-redux'
-import {getTicket, reset} from '../features/tickets/ticketSlice'
-import { useParams } from 'react-router-dom'
+import {getTicket, reset, closeTicket} from '../features/tickets/ticketSlice'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { toast, Toast } from 'react-toastify'
 
@@ -15,6 +15,7 @@ function Ticket() {
   const params = useParams() //to get the ticket id from the URL
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const {ticketId} = useParams()
 
@@ -26,6 +27,13 @@ function Ticket() {
      dispatch(getTicket(ticketId))
      // eslint-disable-next-line
   }, [isError, message, ticketId])
+
+  //close Ticket function
+  const onTicketClose = () => {
+    dispatch(closeTicket(ticketId))
+    toast.success('Ticket Closed')
+    navigate('/tickets')
+  }
 
 
   if (isLoading) {
@@ -48,6 +56,7 @@ function Ticket() {
         </h2>
 
       <h3>Date Submitted: {new Date(ticket.createdAt).toLocaleString('en-US')}</h3>
+      <h3>Product: {ticket.product}</h3>
       <hr/>
 
       <div className='ticket-desc'>
@@ -56,6 +65,11 @@ function Ticket() {
       </div>
 
       </header>
+
+      {/* Show the 'close ticket' button only if ticket is still open */}
+      {ticket.status !== 'closed' && 
+      (<button onClick={onTicketClose} className='btn btn-block btn-danger'>Close Ticket</button>) 
+      }
     </div>
   )
 }

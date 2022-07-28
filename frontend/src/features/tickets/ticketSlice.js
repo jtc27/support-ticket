@@ -61,6 +61,22 @@ export const getTicket = createAsyncThunk('tickets/get', async (ticketId, thunkA
   }
 })
 
+//Close ticket
+export const closeTicket = createAsyncThunk('tickets/close', async (ticketId, thunkAPI) => {  
+  try {
+    //thunkAPI can get state from auth state
+    const token = thunkAPI.getState().auth.user.token
+
+    return await ticketService.closeTicket(ticketId, token) //Don't need ticketData
+  } catch (error) {
+    //WE WANT ERROR MESSAGE FROM THE BACK END
+    const message = 
+    (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+
+    return thunkAPI.rejectWithValue(message)
+  }
+})
+
 export const ticketSlice = createSlice({
   name: 'ticket',
   initialState,
@@ -101,6 +117,18 @@ export const ticketSlice = createSlice({
       state.isLoading = false
       state.isError = true
       state.message = action.payload
+    })
+    .addCase(closeTicket.fulfilled, (state, action) => {
+      state.isLoading = false
+      state.tickets.map((ticket) => 
+      ticket._id === action.payload._id ? (ticket.status = 'closed')
+      : ticket
+      ) 
+      
+      //state.tickets is our array, map thru it
+      //set the correct one based on id (action.payload._id)
+      //This is only on the UI (frontend).  The backend has already been handled.
+      //We want to show this on the UI without having to reload the page
     })
   }
 })

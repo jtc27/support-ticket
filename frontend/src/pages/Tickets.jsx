@@ -5,6 +5,7 @@ import {getTickets, reset} from '../features/tickets/ticketSlice'
 
 import Spinner from '../components/Spinner'
 import BackButton from '../components/BackButton'
+import TicketItem from '../components/TicketItem'
 
 function Tickets() {
 
@@ -15,7 +16,7 @@ function Tickets() {
   // Clears the state on unmount, or there will be errors
   useEffect(() => {
     //if we want something to happen on unmount, we need to return a function from useEffect (see the Firebase project)
-    return() => {
+    return () => {
       if (isSuccess) {
         dispatch(reset())
       }
@@ -32,9 +33,22 @@ function Tickets() {
   }
 
   return (
-    <div>
-      Tickets
-    </div>
+    <>
+      <BackButton url='/'/>
+      <h1>Tickets</h1>
+      <div className='tickets'>
+        <div className="ticket-headings">
+          <div>Date</div>
+          <div>Product</div>
+          <div>Status</div>
+          <div></div> 
+        </div>
+        {tickets.map((ticket) => (
+          <TicketItem key={ticket._id} ticket={ticket} />
+        ))}
+      </div>
+
+    </>
   )
 }
 

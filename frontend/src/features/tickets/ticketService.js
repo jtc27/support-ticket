@@ -18,7 +18,7 @@ const createTicket = async (ticketData, token) => {
 }
 
 //Get all user tickets
-const getTickets = async ( token) => {
+const getTickets = async (token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}` //sending a token you need it in header, just like in POSTMAN

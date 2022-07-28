@@ -10,12 +10,7 @@ function Home() {
     <>
     <section className="heading">
 
-      {user ? ( <h1>Hi <b>{user.name}</b>, what do you need help with?</h1> ) : 
-        (    
-        <>
-          <h1>What do you need help with?</h1>
-        </>
-        )}
+      <h1>What do you need help with?</h1>
 
       <p>Please choose from an option below</p>
     </section>

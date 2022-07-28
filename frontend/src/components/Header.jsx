@@ -20,9 +20,9 @@ function Header() {
 
   return (
     <header className='header'>
-      <div className='logo'>
-        <Link to='/'>Support Desk</Link>
-      </div>
+      
+        <Link to='/'>Support Desk</Link> {user && (<p>Logged in: <u>{user.email}</u> </p>)}
+    
       <ul>
         {user ? (
           <li>

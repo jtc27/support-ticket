@@ -9,9 +9,10 @@ const router = express.Router({mergeParams: true})  //mergeParams object passed 
 //Middleware
 const {protect} = require('../middleware/authMiddleware')
 
-const {getNotes} = require('../controllers/noteController')
+const {getNotes, addNote } = require('../controllers/noteController')
+ 
 
-router.route('/').get(protect, getNotes)
+router.route('/').get(protect, getNotes).post(protect, addNote)
 
 module.exports = router
 
